@@ -5,14 +5,12 @@
 
 $(document).ready(function(){
 	$('#showLogin').on('click', function(e) {
-		alert("YOLO");
-
 		$('#loginModal').modal('show');
 		//document.getElementById("myModal").aria-hiddene;
 	});
 
 	$('#signin').on('click', function (e) {
-		$("#username").set("Yanis");
+		$("#username").text($("#userid").val());
 		//send login information
 	});
 
