@@ -1,3 +1,6 @@
+
+Parse.initialize("aJCIUPwri05ulLDusmNGLnajbiuXC1twyrIbkFXx", "ekuLhxWCFjIZ3JaIYvUFNR4xOPeijbuaAcBeJChh");
+
 $(function() {
 	// on click get map's coordinates
 	var lat;
@@ -19,28 +22,29 @@ $(function() {
 
     // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
     $('#uploadbutton').click(function() {
-      	var serverUrl = 'https://api.parse.com/1/files/' + file.name;
 
-		$.ajax({
-			type: "POST",
-			beforeSend: function(request) {
-				request.setRequestHeader("X-Parse-Application-Id", 'aJCIUPwri05ulLDusmNGLnajbiuXC1twyrIbkFXx');
-				request.setRequestHeader("X-Parse-REST-API-Key", 'bEw5mEccrY8jXtgNvacbeWVWgFDC6qZB74oFoMhF');
-				request.setRequestHeader("Content-Type", file.type);
-			},
+		var parseFile = new Parse.File("news", file);
+		parseFile.save().then(function() {
+		  	// The file has been saved to Parse.
+		  	var postClass = Parse.Object.extend("Post");
+    		var post = new postClass();
+			var point = new Parse.GeoPoint({latitude: lat, longitude: lng});
 
-			url: serverUrl,
-			data: file,
-			processData: false,
-			contentType: false,
+			post.set("rating", 0);
+			post.set("type", "sports");
+			post.set("caption", "awesome");
+			post.set("geoPoint", point);
+			post.set("file", parseFile);
 
-			success: function(data) {
-				alert("File available at: " + data.url);
-			},
-			error: function(data) {
-				var obj = jQuery.parseJSON(data);
-				alert(obj.error);
-			}
+			if (Parse.User.current()) {
+				post.set("userID", Parse.User.current());
+			};
+
+			post.save();
+			
+		}, function(error) {
+		  	// The file either could not be read, or could not be saved to Parse.
+		  	alert('Failed to save file, with error code: ' + error.message);
 		});
 	});
 });
