@@ -9,7 +9,7 @@ $(document).ready(function(){
 
 	var user = Parse.User.current();
 	if(user != null){
-		$("#username").text(name);
+		$("#username").text(user.get("username"));
 		$('#showLogin').text("Log Out");
 		$("#passwordreset").show();
 	}
