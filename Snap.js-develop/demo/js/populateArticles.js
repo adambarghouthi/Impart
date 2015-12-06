@@ -43,6 +43,12 @@ function repopulateArticles(e){
     if (!(map.getZoom() <= minZoomBeforeError))
         query.withinGeoBox("geoPoint", sw, ne);
 
+
+    //CHECK HERE FOR SELECTING SPORTS/POLITICS/ETC...
+    //ADD LAST ADDED FILTER AS WELL
+    //by country?
+    //by continent?
+
     //find the objects
     query.find({
      success: function (results) {
@@ -57,16 +63,35 @@ function repopulateArticles(e){
              var rating = object.get('rating');
              var userID = object.get('userID');
              var updateAt = object.get('updatedAt');
+             var type = "GET THIS INFORMATION HERE"
             
+             var icon = null;
+             switch(type)
+             {
+                case "technology": icon = TechnologyIcon; break;
+                case "culture": icon = CultureIcon; break;
+                case "politics": icon = PoliticsIcon; break;
+                case "sports": icon = SportsIcon; break;
+             }
+
+             if ( icon == null)
+             {
+                //default icon
+             }
+             else
+             {
+                //specific icon
+             }
+
             //alert("url has " + file.url());
              //add marker L.marker
              var marker = new L.marker([point.latitude, point.longitude],
                 {
-                    title: 'caption'
+                    title: caption
                 });
              marker.fileUrl = file.url();
-             marker.clicked = false;
-             
+             marker.clicked = true;
+
              marker.addTo(map);
              marker.dragging.disable();
              marker.bindPopup("<b> " + caption + "</b><br> " + 
@@ -90,15 +115,18 @@ function repopulateArticles(e){
                     this.closePopup();
              });
              
-             marker.on('click', function(e)
+             /*marker.on('click', function(e)
              {
                 this.clicked = !this.clicked;
-             });
+                if(this.clicked)
+                    this.openPopup();
+             });*/
 
              marker.on('dblclick', function(e)
              {
-                this.clicked = !this.clicked;
-                location.href = this.fileUrl;
+
+                //this.clicked = !this.clicked;
+                openArticle(this.fileUrl);
              });
 
              //add marker to current markers
@@ -110,3 +138,54 @@ function repopulateArticles(e){
      }
   });
 }
+
+function openArticle(fileUrl)
+{
+   var win = window.open(fileUrl, '_blank');
+   win.focus(); 
+}
+
+var PoliticsIcon = L.icon({
+                                iconUrl: 'leaf-green.png', //CHANGE THIS
+                                //shadowUrl: 'leaf-shadow.png',
+                                iconSize:     [38, 95], // size of the icon
+                                shadowSize:   [50, 64], // size of the shadow
+                                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                                shadowAnchor: [4, 62],  // the same for the shadow
+                                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                            });
+var SportsIcon = L.icon({
+                                iconUrl: 'leaf-green.png', //CHANGE THIS
+                                //shadowUrl: 'leaf-shadow.png',
+                                iconSize:     [38, 95], // size of the icon
+                                shadowSize:   [50, 64], // size of the shadow
+                                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                                shadowAnchor: [4, 62],  // the same for the shadow
+                                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                            });
+
+var CultureIcon = L.icon({
+                                iconUrl: 'leaf-green.png', //CHANGE THIS
+                                //shadowUrl: 'leaf-shadow.png',
+                                iconSize:     [38, 95], // size of the icon
+                                shadowSize:   [50, 64], // size of the shadow
+                                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                                shadowAnchor: [4, 62],  // the same for the shadow
+                                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                            });
+var TechnologyIcon = L.icon({
+                                iconUrl: 'leaf-green.png', //CHANGE THIS
+                                //shadowUrl: 'leaf-shadow.png',
+                                iconSize:     [38, 95], // size of the icon
+                                shadowSize:   [50, 64], // size of the shadow
+                                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                                shadowAnchor: [4, 62],  // the same for the shadow
+                                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                            });
+
+
+
+
+
+
+
