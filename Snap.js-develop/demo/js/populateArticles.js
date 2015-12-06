@@ -63,39 +63,43 @@ function repopulateArticles(e){
              var rating = object.get('rating');
              var userID = object.get('userID');
              var updateAt = object.get('updatedAt');
-             var type = "GET THIS INFORMATION HERE"
+             var type = object.get('type');
             
-             var icon = null;
+             var Icon = null;
              switch(type)
              {
-                case "technology": icon = TechnologyIcon; break;
-                case "culture": icon = CultureIcon; break;
-                case "politics": icon = PoliticsIcon; break;
-                case "sports": icon = SportsIcon; break;
+                case "technology": Icon = TechnologyIcon; break;
+                case "culture": Icon = CultureIcon; break;
+                case "politics": Icon = PoliticsIcon; break;
+                case "sports": Icon = SportsIcon; break;
              }
 
-             if ( icon == null)
+             /*if ( icon == null)
              {
                 //default icon
              }
              else
              {
                 //specific icon
-             }
+             }*/
 
             //alert("url has " + file.url());
              //add marker L.marker
              var marker = new L.marker([point.latitude, point.longitude],
-                {
+                 {
+                    icon :Icon
+                 },
+                 {
                     title: caption
-                });
+                 });
+             
              marker.fileUrl = file.url();
              marker.clicked = true;
 
              marker.addTo(map);
              marker.dragging.disable();
              marker.bindPopup("<b> " + caption + "</b><br> " + 
-                              "<a target=\"_blank\" href=\"" + file.url() + "\"> see article </a></br>" + 
+                              "<a target=\"_blank\" href=\"" + file.url() + "\"> See Article </a></br>" + 
                                 rating + "</br>" 
                                 + userID.username + "</br>" 
                                 + updateAt + "</br>",
@@ -111,8 +115,8 @@ function repopulateArticles(e){
 
              marker.on('mouseout', function(e)
              {
-                if (!this.clicked)
-                    this.closePopup();
+                //if (!this.clicked)
+                   // this.closePopup();
              });
              
              /*marker.on('click', function(e)
@@ -146,7 +150,7 @@ function openArticle(fileUrl)
 }
 
 var PoliticsIcon = L.icon({
-                                iconUrl: 'leaf-green.png', //CHANGE THIS
+                                iconUrl: '../assets/politicsMarker.png', //CHANGE THIS
                                 //shadowUrl: 'leaf-shadow.png',
                                 iconSize:     [38, 95], // size of the icon
                                 shadowSize:   [50, 64], // size of the shadow
@@ -155,7 +159,7 @@ var PoliticsIcon = L.icon({
                                 popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
                             });
 var SportsIcon = L.icon({
-                                iconUrl: 'leaf-green.png', //CHANGE THIS
+                                iconUrl: '../assets/sportsMarker.png', //CHANGE THIS
                                 //shadowUrl: 'leaf-shadow.png',
                                 iconSize:     [38, 95], // size of the icon
                                 shadowSize:   [50, 64], // size of the shadow
@@ -165,7 +169,7 @@ var SportsIcon = L.icon({
                             });
 
 var CultureIcon = L.icon({
-                                iconUrl: 'leaf-green.png', //CHANGE THIS
+                                iconUrl: '../assets/cultureMarker.png', //CHANGE THIS
                                 //shadowUrl: 'leaf-shadow.png',
                                 iconSize:     [38, 95], // size of the icon
                                 shadowSize:   [50, 64], // size of the shadow
@@ -174,7 +178,7 @@ var CultureIcon = L.icon({
                                 popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
                             });
 var TechnologyIcon = L.icon({
-                                iconUrl: 'leaf-green.png', //CHANGE THIS
+                                iconUrl: '../assets/technologyMarker.png', //CHANGE THIS
                                 //shadowUrl: 'leaf-shadow.png',
                                 iconSize:     [38, 95], // size of the icon
                                 shadowSize:   [50, 64], // size of the shadow
