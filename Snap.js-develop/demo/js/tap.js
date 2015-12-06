@@ -8,9 +8,14 @@ $(function() {
 	var file;
 
 	map.on('click', function(e) {
-	   $('#myModal').modal('show'); 
-	   lat = e.latlng.lat;
-	   lng = e.latlng.lng;
+		if (!Parse.User.current()) {
+			$("#generalModalContent").html("<p><h4>Please log in or sign up to post articles</h4></p>");
+			$("#generalModal").modal("show");
+			return;
+		}
+	   	$('#myModal').modal('show'); 
+	   	lat = e.latlng.lat;
+	   	lng = e.latlng.lng;
 	});
 
 	// This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
@@ -22,7 +27,6 @@ $(function() {
 
     // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
     $('#uploadbutton').click(function() {
-
 		var parseFile = new Parse.File("news", file);
 		parseFile.save().then(function() {
 		  	// The file has been saved to Parse.
@@ -31,8 +35,8 @@ $(function() {
 			var point = new Parse.GeoPoint({latitude: lat, longitude: lng});
 
 			post.set("rating", 0);
-			post.set("type", "sports");
-			post.set("caption", "awesome");
+			post.set("type", $("#selecttype option:selected").val());
+			post.set("caption", $("#message-text").val());
 			post.set("geoPoint", point);
 			post.set("file", parseFile);
 
@@ -41,6 +45,10 @@ $(function() {
 			};
 
 			post.save();
+
+			//hide pop up modal and refresh page
+			$('#myModal').modal('hide');
+			location.reload();
 			
 		}, function(error) {
 		  	// The file either could not be read, or could not be saved to Parse.
