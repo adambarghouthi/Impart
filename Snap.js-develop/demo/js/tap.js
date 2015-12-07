@@ -42,7 +42,7 @@ $(function() {
 
 			post.set("rating", 0);
 			post.set("type", $("#selecttype option:selected").val());
-			post.set("caption", $("#message-text").val());
+			post.set("caption", CKEDITOR.instances.editor1.getData());
 			post.set("geoPoint", point);
 			post.set("file", parseFile);
 
