@@ -83,21 +83,22 @@ function repopulateArticles(e){
                  {
                     title: caption
                  });
-             
+
              marker.fileUrl = file.url();
              marker.clicked = true;
-             
+             marker.title = caption;   
              marker.addTo(map);
              marker.dragging.disable();
              marker.bindPopup("<b> " + caption + "</b><br> " + 
-                              "<a target=\"_blank\" href=\"" + file.url() + "\"> See Article </a></br>" + 
+                             '<a href="javascript:void(0);" onclick="openArticle(\'' + marker.fileUrl + '\',\'' + marker.title + '\');"> See Article </a></br>' + 
                                 rating + "</br>" 
                                 + username + "</br>" 
                                 + updateAt + "</br>",
                                 {
                                     autopan:  false
                                 });
-             
+             //
+             //<a href="javascript:void(0);" onclick="ShowOld(2367,146986,2);">
              marker.on('mouseover', function(e)
              {
                 this.openPopup();
@@ -119,7 +120,7 @@ function repopulateArticles(e){
              marker.on('dblclick', function(e)
              {
                 //this.clicked = !this.clicked;
-                openArticle(this.fileUrl, caption);
+                openArticle(this.fileUrl, this.title);
              });
 
              //add marker to current markers
