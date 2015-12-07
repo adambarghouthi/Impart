@@ -10,7 +10,7 @@ $(document).ready(function(){
 	var user = Parse.User.current();
 	if(user != null){
 		$("#username").text(user.get("username"));
-		$('#showLogin').text("Log Out");
+		$('#showLogin').html("Log Out<span class=\"glyphicon glyphicon-log-out\"></span>");
 		$("#passwordreset").show();
 	}
 	
@@ -27,7 +27,7 @@ $(document).ready(function(){
 			$("#generalModal").modal("show");
 			
 			$("#username").text("Guest");
-			$('#showLogin').text("Login/Sign up");
+			$('#showLogin').html("Login/Sign up<span class=\"glyphicon glyphicon-log-in\">");
 			$("#passwordreset").hide();
 		}
 	});
@@ -133,7 +133,7 @@ function processLogin(name, password) {
 			  $("#generalModal").modal("show");
 			  $("#username").text(name);
 			  $('#loginModal').modal('hide');
-			  $('#showLogin').text("Log Out");
+			  $('#showLogin').html("Log Out<span class=\"glyphicon glyphicon-log-out\"></span>");
 			  $("#passwordreset").show();
 		  },
 		  error: function(user, error) {
