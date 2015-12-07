@@ -127,7 +127,7 @@ function repopulateArticles(e){
              marker.bindPopup("<b> " + caption + "</b><br> " + 
                              '<a href="javascript:void(0);" onclick="openArticle(\'' + marker.fileUrl + '\',\'' + marker.title + '\');"> See Article </a></br>' + 
                                 rating + "</br>" 
-                                + username + "</br>" 
+                                + "<a href='#' onclick='window.location.replace(\"./profile.html?"+username+"\");'>"+username+"</a>" + "</br>" 
                                 + updateAt + "</br>",
                                 {
                                     autopan:  false
@@ -161,20 +161,37 @@ function repopulateArticles(e){
              //add marker to current markers
              currentMarkers.push(marker);
         }
+        $("#politicsnb").text(politicsCount);
+        $("#technologynb").text(technologyCount);
+        $("#culturenb").text(cultureCount);
+        $("#sportsnb").text(sportsCount);
      },
      error: function (error) {
          alert("Error: " + error.code + " " + error.message);
      }
   });
 
-  $("#politicsnb").text("" + politicsCount);
-  $("#technologynb").text(technologyCount);
-  $("#culturenb").text(cultureCount);
-  $("#sportsnb").text(sportsCount);
-  $("#totalnb").text((politicsCount + technologyCount + cultureCount + sportsCount));
+  
+  //$("#totalnb").text((politicsCount + technologyCount + cultureCount + sportsCount));
 }
 
 function openArticle(fileUrl, caption) {
+    //update view count
+    var post = Parse.Object.extend("Post");
+    var query = new Parse.Query(post);
+    query.equalTo("caption", caption);
+    query.find({
+      success: function(results) {
+        for (var i = 0; i < results.length; i++) {
+          var object = results[i];
+          object.increment("rating");
+          object.save();
+        }
+      },
+      error: function(error) {
+      }
+    });
+
     $("#generalModalContent").html(caption + "<br><br>" + "<img class=\"img-responsive\" src=" + fileUrl + ">");
     $("#generalModal").modal("show");
 }
