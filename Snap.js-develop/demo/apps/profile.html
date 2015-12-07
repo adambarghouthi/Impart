@@ -162,62 +162,67 @@
     <script type="text/javascript">
         Parse.initialize("aJCIUPwri05ulLDusmNGLnajbiuXC1twyrIbkFXx", "ekuLhxWCFjIZ3JaIYvUFNR4xOPeijbuaAcBeJChh");  
 
-        var user = window.location.search.substring(1);
-        $("#username").html(user+"<small>      Profile</small>");
+        $(document).ready(function(){
+            var user = window.location.search.substring(1);
+            $("#username").html(user+"<small>      Profile</small>");
 
-        //query database
-        var Post = Parse.Object.extend("Post");
-        var query = new Parse.Query(Post);
+            //query database
+            var Post = Parse.Object.extend("Post");
+            var query = new Parse.Query(Post);
 
-        //get all articles with :
-        //      1. with highest rating/views
-        //      2. up to 5 (per page)
-        //      3. include user information from userID such as username etc...
-        //query.descending("rating").limit(5).include("userID");
+            //get all articles with :
+            //      1. with highest views
+            //      2. up to 5 (per page)
+            //      3. include user information from userID such as username etc...
+            //query.descending("rating").limit(5).include("userID");
 
-        var artCount = 1;
+            var artCount = 1;
 
-        //find the objects
-        query.find({
-         success: function (results) {
-             for (var i = 0; i < results.length; i++) {
+            query.descending("updatedAt").include("userID");
 
-                 var object = results[i];
+            //find the objects
+            query.find({
+             success: function (results) {
+                 for (var i = 0; i < results.length; i++) {
 
-                 //get object variables
-                 //var point = object.get('geoPoint');
-                 var caption = object.get('caption');
-                 var file = object.get('file');
-                 var rating = object.get('rating');
-                 var userID = object.get('userID');
-                 var username = userID.get("username");
-                 var updateAt = object.get('updatedAt');
-                 var type = object.get('type');
+                     var object = results[i];
 
-                 if(username == user && artCount<6){
-                    var artID = "#article"+artCount;
-                    artCount++;
-                    var fileDiv = "<div class='col-md-7'>\
-                                        <a href='"+file.url()+"'>\
-                                            <img class='img-responsive' src='"+file.url()+"'>\
-                                        </a>\
-                                    </div>";
+                     //get object variables
+                     //var point = object.get('geoPoint');
+                     var caption = object.get('caption');
+                     var file = object.get('file');
+                     var rating = object.get('rating');
+                     var userID = object.get('userID');
+                     var username = userID.get("username");
+                     var updateAt = object.get('updatedAt');
+                     var type = object.get('type');
 
-                    var articleDiv = "<div class='col-md-5'>"+caption+
-                                    "</br><b>"+rating + " views</b></br>"
-                                    + "<i>Published on "+updateAt + "</i></br>"+
-                                    "</div>";
+                     if(username == user && artCount<6){
+                        var artID = "#article"+artCount;
+                        artCount++;
+                        var fileDiv = "<div class='col-md-7'>\
+                                            <a href='"+file.url()+"'>\
+                                                <img class='img-responsive' src='"+file.url()+"'>\
+                                            </a>\
+                                        </div>";
+
+                        var articleDiv = "<div class='col-md-5'>"+caption+
+                                        "</br><b>"+rating + " views</b></br>"
+                                        + "<i>Published on "+updateAt + "</i></br>"
+                                        + "<i>Section: <b>"+type + "</b></i></br>"
+                                        +"</div>";
 
 
-                    $(artID).html(fileDiv + articleDiv);
-                 }
+                        $(artID).html(fileDiv + articleDiv);
+                     }
 
-            }
-         },
-         error: function (error) {
-             alert("Error retrieving" +user+ "'s profile: " + error.code + " " + error.message);
-         }
-      });
+                }
+             },
+             error: function (error) {
+                 alert("Error retrieving" +user+ "'s profile: " + error.code + " " + error.message);
+             }
+          });
+});
 
     </script>
 

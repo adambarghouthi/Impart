@@ -124,9 +124,7 @@ function repopulateArticles(e){
 
              marker.addTo(map);
              marker.dragging.disable();
-             marker.bindPopup("<b> " + caption + "</b><br> " + 
-                             '<a href="javascript:void(0);" onclick="openArticle(\'' + marker.fileUrl + '\',\'' + marker.title + '\');"> See Article </a></br>' + 
-                                rating + "</br>" 
+             marker.bindPopup("<b> " + caption + "</b><br> " + rating + " views</br>" 
                                 + "<a href='#' onclick='window.location.replace(\"./profile.html?"+username+"\");'>"+username+"</a>" + "</br>" 
                                 + updateAt + "</br>",
                                 {
