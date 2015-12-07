@@ -27,6 +27,12 @@ $(function() {
 
     // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
     $('#uploadbutton').click(function() {
+
+    	if (file == null) {
+			$(".alert").show();
+			return;
+    	};
+
 		var parseFile = new Parse.File("news", file);
 		parseFile.save().then(function() {
 		  	// The file has been saved to Parse.
