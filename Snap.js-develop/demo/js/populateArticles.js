@@ -1,4 +1,3 @@
-
 var minZoomBeforeError = 3; // check to see if we should change default zoom level
 var maxArticlesShown = 100;
 var currentMarkers = [];
@@ -15,7 +14,6 @@ repopulateArticles(5);
 //query data base for 100 highest rated articles again after moving or zooming
 map.on('zoomend', repopulateArticles);
 map.on('moveend', repopulateArticles);
-
 
 function repopulateArticles(e){
 
@@ -48,41 +46,42 @@ function repopulateArticles(e){
     //      3. include user information from userID such as username etc...
     query.descending("rating").limit(maxArticlesShown).include("userID");
     
+    var containedIn = [];
+
     //check if we don't display everything
     if (!allFilter)
     {
         //check if we display political articles
         if (politicsFilter)
-            query.equalTo("type", "politics");
+            containedIn.push("politics");
 
         //check if we display sports articles
         if (sportsFilter)
-             query.equalTo("type", "sports");
+             containedIn.push("sports");
 
         //check if we display cultural articles
         if (cultureFilter)
-             query.equalTo("type", "culture");
+          containedIn.push("culture");
 
         //check if we display technological articles    
         if (technologyFilter)
-             query.equalTo("type", "technology");
+             containedIn.push("technology");
+
+         query.containedIn("type", containedIn);
     }
-
-
-
 
     //not sure check this (we get error if we zoom out too much)
     if (!(map.getZoom() <= minZoomBeforeError))
         query.withinGeoBox("geoPoint", sw, ne);
 
-    //add users information from other table
-    query
-
-
     //CHECK HERE FOR SELECTING SPORTS/POLITICS/ETC...
     //ADD LAST ADDED FILTER AS WELL
     //by country?
     //by continent?
+    var politicsCount = 0;
+    var cultureCount = 0;
+    var sportsCount = 0;
+    var technologyCount = 0;
 
     //find the objects
     query.find({
@@ -104,10 +103,10 @@ function repopulateArticles(e){
              var Icon = null;
              switch(type)
              {
-                case "technology": Icon = TechnologyIcon; break;
-                case "culture": Icon = CultureIcon; break;
-                case "politics": Icon = PoliticsIcon; break;
-                case "sports": Icon = SportsIcon; break;
+                case "technology": Icon = TechnologyIcon; technologyCount = technologyCount + 1; break;
+                case "culture": Icon = CultureIcon; cultureCount = cultureCount + 1; break;
+                case "politics": Icon = PoliticsIcon; politicsCount = politicsCount + 1; break;
+                case "sports": Icon = SportsIcon; sportsCount = sportsCount + 1; break;
              }
   
              //add marker L.marker
@@ -122,6 +121,7 @@ function repopulateArticles(e){
              marker.fileUrl = file.url();
              marker.clicked = true;
              marker.title = caption;   
+
              marker.addTo(map);
              marker.dragging.disable();
              marker.bindPopup("<b> " + caption + "</b><br> " + 
@@ -166,6 +166,12 @@ function repopulateArticles(e){
          alert("Error: " + error.code + " " + error.message);
      }
   });
+
+  $("#politicsnb").text("" + politicsCount);
+  $("#technologynb").text(technologyCount);
+  $("#culturenb").text(cultureCount);
+  $("#sportsnb").text(sportsCount);
+  $("#totalnb").text((politicsCount + technologyCount + cultureCount + sportsCount));
 }
 
 function openArticle(fileUrl, caption) {
@@ -174,7 +180,7 @@ function openArticle(fileUrl, caption) {
 }
 
 var PoliticsIcon = L.icon({
-                                iconUrl: '../assets/politicsMarker.png', //CHANGE THIS
+                                iconUrl: '../assets/politicsMarker.png',
                                 //shadowUrl: 'leaf-shadow.png',
                                 iconSize:     [31, 41], // size of the icon
                                 shadowSize:   [50, 64], // size of the shadow
@@ -183,7 +189,7 @@ var PoliticsIcon = L.icon({
                                 popupAnchor:  [3, -38] // point from which the popup should open relative to the iconAnchor
                             });
 var SportsIcon = L.icon({
-                                iconUrl: '../assets/sportsMarker.png', //CHANGE THIS
+                                iconUrl: '../assets/sportsMarker.png',
                                 //shadowUrl: 'leaf-shadow.png',
                                 iconSize:     [31, 41], // size of the icon
                                 shadowSize:   [50, 64], // size of the shadow
@@ -193,7 +199,7 @@ var SportsIcon = L.icon({
                             });
 
 var CultureIcon = L.icon({
-                                iconUrl: '../assets/cultureMarker.png', //CHANGE THIS
+                                iconUrl: '../assets/cultureMarker.png',
                                 //shadowUrl: 'leaf-shadow.png',
                                 iconSize:     [31, 41], // size of the icon
                                 shadowSize:   [50, 64], // size of the shadow
@@ -202,7 +208,7 @@ var CultureIcon = L.icon({
                                 popupAnchor:  [3, -38] // point from which the popup should open relative to the iconAnchor
                             });
 var TechnologyIcon = L.icon({
-                                iconUrl: '../assets/technologyMarker.png', //CHANGE THIS
+                                iconUrl: '../assets/technologyMarker.png',
                                 //shadowUrl: 'leaf-shadow.png',
                                 iconSize:     [31, 41], // size of the icon
                                 shadowSize:   [50, 64], // size of the shadow
