@@ -52,6 +52,7 @@ $(function() {
 			post.set("caption", CKEDITOR.instances.editor1.getData());
 			post.set("geoPoint", point);
 			post.set("file", parseFile);
+			post.set("username", Parse.User.current().get("username"));
 
 			if (Parse.User.current()) {
 				post.set("userID", Parse.User.current());
