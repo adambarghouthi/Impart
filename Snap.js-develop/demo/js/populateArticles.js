@@ -43,7 +43,7 @@ function repopulateArticles(e){
     if (!(map.getZoom() <= minZoomBeforeError))
         query.withinGeoBox("geoPoint", sw, ne);
 
-
+    query.include("userID");
     //CHECK HERE FOR SELECTING SPORTS/POLITICS/ETC...
     //ADD LAST ADDED FILTER AS WELL
     //by country?
@@ -62,9 +62,10 @@ function repopulateArticles(e){
              var file = object.get('file');
              var rating = object.get('rating');
              var userID = object.get('userID');
+             var username = userID.get("username");
              var updateAt = object.get('updatedAt');
              var type = object.get('type');
-            
+
              var Icon = null;
              switch(type)
              {
@@ -73,17 +74,7 @@ function repopulateArticles(e){
                 case "politics": Icon = PoliticsIcon; break;
                 case "sports": Icon = SportsIcon; break;
              }
-
-             /*if ( icon == null)
-             {
-                //default icon
-             }
-             else
-             {
-                //specific icon
-             }*/
-
-            //alert("url has " + file.url());
+  
              //add marker L.marker
              var marker = new L.marker([point.latitude, point.longitude],
                  {
@@ -95,18 +86,17 @@ function repopulateArticles(e){
              
              marker.fileUrl = file.url();
              marker.clicked = true;
-
+             
              marker.addTo(map);
              marker.dragging.disable();
              marker.bindPopup("<b> " + caption + "</b><br> " + 
                               "<a target=\"_blank\" href=\"" + file.url() + "\"> See Article </a></br>" + 
                                 rating + "</br>" 
-                                + userID.username + "</br>" 
+                                + username + "</br>" 
                                 + updateAt + "</br>",
                                 {
                                     autopan:  false
                                 });
-             //marker.openPopup();
              
              marker.on('mouseover', function(e)
              {
@@ -152,44 +142,37 @@ function openArticle(fileUrl)
 var PoliticsIcon = L.icon({
                                 iconUrl: '../assets/politicsMarker.png', //CHANGE THIS
                                 //shadowUrl: 'leaf-shadow.png',
-                                iconSize:     [38, 95], // size of the icon
+                                iconSize:     [31, 41], // size of the icon
                                 shadowSize:   [50, 64], // size of the shadow
-                                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                                iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
                                 shadowAnchor: [4, 62],  // the same for the shadow
-                                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                                popupAnchor:  [3, -38] // point from which the popup should open relative to the iconAnchor
                             });
 var SportsIcon = L.icon({
                                 iconUrl: '../assets/sportsMarker.png', //CHANGE THIS
                                 //shadowUrl: 'leaf-shadow.png',
-                                iconSize:     [38, 95], // size of the icon
+                                iconSize:     [31, 41], // size of the icon
                                 shadowSize:   [50, 64], // size of the shadow
-                                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                                iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
                                 shadowAnchor: [4, 62],  // the same for the shadow
-                                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                                popupAnchor:  [3, -38] // point from which the popup should open relative to the iconAnchor
                             });
 
 var CultureIcon = L.icon({
                                 iconUrl: '../assets/cultureMarker.png', //CHANGE THIS
                                 //shadowUrl: 'leaf-shadow.png',
-                                iconSize:     [38, 95], // size of the icon
+                                iconSize:     [31, 41], // size of the icon
                                 shadowSize:   [50, 64], // size of the shadow
-                                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                                iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
                                 shadowAnchor: [4, 62],  // the same for the shadow
-                                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                                popupAnchor:  [3, -38] // point from which the popup should open relative to the iconAnchor
                             });
 var TechnologyIcon = L.icon({
                                 iconUrl: '../assets/technologyMarker.png', //CHANGE THIS
                                 //shadowUrl: 'leaf-shadow.png',
-                                iconSize:     [38, 95], // size of the icon
+                                iconSize:     [31, 41], // size of the icon
                                 shadowSize:   [50, 64], // size of the shadow
-                                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                                iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
                                 shadowAnchor: [4, 62],  // the same for the shadow
-                                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                                popupAnchor:  [3, -38] // point from which the popup should open relative to the iconAnchor
                             });
-
-
-
-
-
-
-
