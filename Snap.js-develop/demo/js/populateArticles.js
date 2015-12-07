@@ -118,9 +118,8 @@ function repopulateArticles(e){
 
              marker.on('dblclick', function(e)
              {
-
                 //this.clicked = !this.clicked;
-                openArticle(this.fileUrl);
+                openArticle(this.fileUrl, caption);
              });
 
              //add marker to current markers
@@ -133,10 +132,9 @@ function repopulateArticles(e){
   });
 }
 
-function openArticle(fileUrl)
-{
-   var win = window.open(fileUrl, '_blank');
-   win.focus(); 
+function openArticle(fileUrl, caption) {
+    $("#generalModalContent").html(caption + "<br><br>" + "<img class=\"img-responsive\" src=" + fileUrl + ">");
+    $("#generalModal").modal("show");
 }
 
 var PoliticsIcon = L.icon({
