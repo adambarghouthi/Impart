@@ -3,6 +3,12 @@ var minZoomBeforeError = 3; // check to see if we should change default zoom lev
 var maxArticlesShown = 100;
 var currentMarkers = [];
 
+var politicsFilter = true;
+var sportsFilter = true;
+var cultureFilter = true;
+var technologyFilter = true;
+var allFilter = true;
+
 //populate articles (dummmy parameter   )
 repopulateArticles(5);
 
@@ -36,14 +42,43 @@ function repopulateArticles(e){
     var Post = Parse.Object.extend("Post");
     var query = new Parse.Query(Post);
 
-    //get all articles within the visible area
-    query.descending("rating").limit(maxArticlesShown);
+    //get all articles with :
+    //      1. with highest rating/views
+    //      2. up to maxArtcilesShown
+    //      3. include user information from userID such as username etc...
+    query.descending("rating").limit(maxArticlesShown).include("userID");
     
+    //check if we don't display everything
+    if (!allFilter)
+    {
+        //check if we display political articles
+        if (politicsFilter)
+            query.equalTo("type", "politics");
+
+        //check if we display sports articles
+        if (sportsFilter)
+             query.equalTo("type", "sports");
+
+        //check if we display cultural articles
+        if (cultureFilter)
+             query.equalTo("type", "culture");
+
+        //check if we display technological articles    
+        if (technologyFilter)
+             query.equalTo("type", "technology");
+    }
+
+
+
+
     //not sure check this (we get error if we zoom out too much)
     if (!(map.getZoom() <= minZoomBeforeError))
         query.withinGeoBox("geoPoint", sw, ne);
 
-    query.include("userID");
+    //add users information from other table
+    query
+
+
     //CHECK HERE FOR SELECTING SPORTS/POLITICS/ETC...
     //ADD LAST ADDED FILTER AS WELL
     //by country?

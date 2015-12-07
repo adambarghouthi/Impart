@@ -1,4 +1,6 @@
 
+var minZoomBeforePost = 6;
+
 Parse.initialize("aJCIUPwri05ulLDusmNGLnajbiuXC1twyrIbkFXx", "ekuLhxWCFjIZ3JaIYvUFNR4xOPeijbuaAcBeJChh");
 
 $(function() {
@@ -10,6 +12,11 @@ $(function() {
 	map.on('click', function(e) {
 		if (!Parse.User.current()) {
 			$("#generalModalContent").html("<p><h4>Please log in or sign up to post articles</h4></p>");
+			$("#generalModal").modal("show");
+			return;
+		}
+		else if (map.getZoom() < minZoomBeforePost) {
+			$("#generalModalContent").html("<p><h4>Please zoom in " + (minZoomBeforePost - map.getZoom()) + " or more level(s) to specify a more precise location </h4></p>");
 			$("#generalModal").modal("show");
 			return;
 		}
